@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -43,6 +44,7 @@ import com.example.just.Adapter.StoryAdapter;
 import com.example.just.Bean.Story;
 import com.example.just.DB.MyDatabaseHelper;
 import com.example.just.R;
+import com.example.just.Receiver.NetworkChangeReceiver;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.youth.banner.Banner;
@@ -55,6 +57,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import es.dmoral.toasty.Toasty;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -82,6 +85,8 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
     public ArrayList<String> list_title;
     public List<Cate> cateList = new ArrayList<>();
     public static String id = "0";
+    private IntentFilter intentFilter;
+    private NetworkChangeReceiver networkChangeReceiver;
 
     //getList_id切换主题
     public static void getList(final String id) {
@@ -92,7 +97,7 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
                     storyList.clear();
                     OkHttpClient client = new OkHttpClient();
                     RequestBody requestBody = new FormBody.Builder()
-                            .add("id",id)
+                            .add("id", id)
                             .build();
                     Request request = new Request.Builder()
                             .url("http://120.79.65.201:80/Android/Hot")
@@ -154,7 +159,7 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
     //轮播图的监听方法
     @Override
     public void OnBannerClick(int position) {
-        Toast.makeText(MainActivity.this, "你点了第" + position + "张轮播图", Toast.LENGTH_SHORT).show();
+        Toasty.info(MainActivity.this, "你点了第" + position + "张轮播图", Toast.LENGTH_SHORT, true).show();
     }
 
     public class MyLoader extends ImageLoader {
@@ -172,6 +177,10 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        networkChangeReceiver = new NetworkChangeReceiver();
+        registerReceiver(networkChangeReceiver, intentFilter);
         initView();
         dbHelper = new MyDatabaseHelper(this, "Love.db", null, 1);
         dbHelper.getWritableDatabase();
@@ -257,16 +266,14 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
                             user_mail.setText(mail);
                             user_name.setText(name);
                             user_image.setImageResource(R.drawable.nav_icon);
-                            Toast.makeText(MainActivity.this, "退出成功", Toast.LENGTH_SHORT).show();
+                            Toasty.success(MainActivity.this, "退出成功", Toast.LENGTH_SHORT, true).show();
                             break;
                         case R.id.contact:
                             //短信、电话、QQ
                             showDialog(recyclerView);
                             break;
                         case R.id.banben:
-
-                            Toast.makeText(MainActivity.this, "当前已是最新版本", Toast.LENGTH_SHORT).show();
-
+                            Toasty.info(MainActivity.this, "当前已是最新版本", Toast.LENGTH_SHORT, true).show();
                             break;
                         default:
                     }
@@ -349,11 +356,17 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
                         getList(id);
                         adapter.notifyDataSetChanged();
                         swipeRefresh.setRefreshing(false);
-                        Toast.makeText(MainActivity.this, "刷新成功", Toast.LENGTH_SHORT).show();
+                        Toasty.success(MainActivity.this, "刷新成功", Toast.LENGTH_SHORT,true).show();
                     }
                 });
             }
         }).start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(networkChangeReceiver);
     }
 
     //设置back键
@@ -429,7 +442,7 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(MainActivity.this, "请检查是否安装QQ", Toast.LENGTH_SHORT).show();
+                    Toasty.warning(MainActivity.this, "请检查是否安装QQ", Toast.LENGTH_SHORT,true).show();
                 }
                 dialog.dismiss();
             }
