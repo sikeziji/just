@@ -1,15 +1,17 @@
 # just
-    ��ӭҳ����
-    ʹ��banner�ֲ�ͼ
-    ʹ��FloatingActionButton���������֣�������ʧ
-    ��̨JSOUP��ȡ��Ϣ������json��ʽ��ʵʱ����ˢ��
+    v2.0:改善页面，首页加入综艺、体育、科技能栏目可进行选择
+
+    欢迎页渐进
+    使用banner轮播图
+    使用FloatingActionButton，上拉出现，下拉消失
+    后台JSOUP爬取信息，返回json格式，实时下拉刷新
 
 
-    ʹ��������ʵ�ֵ�¼����
+    使用网络编程实现登录功能
 
 
-    �������⣬ʵ��ҹ��ģʽ
-    ʹ�ðٶȵ�ͼ�鿴λ��
-    Sqliteʵ�ֱ����ղع��ܣ���ɾ�Ĳ飩  
-    Intentʵ����ϵ���ߣ�QQ���绰�����ţ�
-    �汾����Git
+    更换主题，实现夜间模式
+    使用百度地图查看位置
+    Sqlite实现本机收藏功能（增删改查）  
+    Intent实现联系作者（QQ、电话、短信）
+    版本控制Git
