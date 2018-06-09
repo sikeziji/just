@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -34,6 +36,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.just.Adapter.CateAdapter;
+import com.example.just.Bean.Cate;
 import com.example.just.Bean.Person;
 import com.example.just.Adapter.StoryAdapter;
 import com.example.just.Bean.Story;
@@ -51,39 +55,48 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
 public class MainActivity extends BaseActivity implements OnBannerListener {
-    private long mExitTime = System.currentTimeMillis();
-    private DrawerLayout mDrawerLayout;
-    private RecyclerView recyclerView;
-    private Handler handler;
+    public long mExitTime = System.currentTimeMillis();
+    public DrawerLayout mDrawerLayout;
+    public RecyclerView recyclerView;
+    public static Handler handler;
     public static String mail = "";
     public static String name = "";
     public static int img = R.drawable.nav_icon;
     public TextView user_mail;
     public TextView user_name;
     public static CircleImageView user_image;
-    public List<Story> storyList = new ArrayList<>();
-    private StoryAdapter adapter;
-    private SwipeRefreshLayout swipeRefresh;
-    private MyDatabaseHelper dbHelper;
-    private Banner banner;
-    private ArrayList<String> list_path;
-    private ArrayList<String> list_title;
+    public static List<Story> storyList = new ArrayList<>();
+    public StoryAdapter adapter;
+    public SwipeRefreshLayout swipeRefresh;
+    public MyDatabaseHelper dbHelper;
+    public Banner banner;
+    public ArrayList<String> list_path;
+    public ArrayList<String> list_title;
+    public List<Cate> cateList = new ArrayList<>();
+    public static String id = "0";
 
-    private void getList() {
+    //getList_id切换主题
+    public static void getList(final String id) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     storyList.clear();
                     OkHttpClient client = new OkHttpClient();
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("id",id)
+                            .build();
                     Request request = new Request.Builder()
                             .url("http://120.79.65.201:80/Android/Hot")
+                            .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
                     String responeData = response.body().string();
@@ -100,7 +113,8 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
         }).start();
     }
 
-    private void initView() {
+    //轮播图
+    public void initView() {
         banner = (Banner) findViewById(R.id.banner);
         //放图片地址的集合
         list_path = new ArrayList<>();
@@ -135,21 +149,21 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
                 .setOnBannerListener(this)
                 //必须最后调用的方法，启动轮播图。
                 .start();
-
-
     }
+
     //轮播图的监听方法
     @Override
     public void OnBannerClick(int position) {
-        Toast.makeText(MainActivity.this, "你点了第"+position+"张轮播图", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "你点了第" + position + "张轮播图", Toast.LENGTH_SHORT).show();
     }
 
-    private class MyLoader extends ImageLoader {
+    public class MyLoader extends ImageLoader {
         @Override
         public void displayImage(Context context, Object path, ImageView imageView) {
             Glide.with(context).load((String) path).into(imageView);
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //配置布局文件
@@ -161,10 +175,17 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
         initView();
         dbHelper = new MyDatabaseHelper(this, "Love.db", null, 1);
         dbHelper.getWritableDatabase();
+        initCate();
+        RecyclerView cate_recyclerView = findViewById(R.id.cate_rview);
+        LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
+        layoutManager1.setOrientation(LinearLayoutManager.HORIZONTAL);
+        cate_recyclerView.setLayoutManager(layoutManager1);
+        CateAdapter adapter1 = new CateAdapter(cateList);
+        cate_recyclerView.setAdapter(adapter1);
         recyclerView = (RecyclerView) findViewById(R.id.main_rview);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(layoutManager);
-        getList();
+        getList(id);
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -243,18 +264,9 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
                             showDialog(recyclerView);
                             break;
                         case R.id.banben:
-                            ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
-                            progressDialog.setTitle("检查更新");
-                            progressDialog.setMessage("Loading...");
-                            progressDialog.setCancelable(false);
-                            progressDialog.show();
-                            try {
-                                Thread.sleep(1000);
-                                progressDialog.dismiss();
-                                Toast.makeText(MainActivity.this, "当前已是最新版本", Toast.LENGTH_SHORT).show();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+
+                            Toast.makeText(MainActivity.this, "当前已是最新版本", Toast.LENGTH_SHORT).show();
+
                             break;
                         default:
                     }
@@ -311,7 +323,18 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
 
     }
 
-    private void refreshStory() {
+    public void initCate() {
+        cateList.add(new Cate("首页"));
+        cateList.add(new Cate("综艺"));
+        cateList.add(new Cate("体育"));
+        cateList.add(new Cate("明星"));
+        cateList.add(new Cate("科技"));
+        cateList.add(new Cate("军事"));
+        cateList.add(new Cate("旅游"));
+        cateList.add(new Cate("文化"));
+    }
+
+    public void refreshStory() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -323,7 +346,7 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        getList();
+                        getList(id);
                         adapter.notifyDataSetChanged();
                         swipeRefresh.setRefreshing(false);
                         Toast.makeText(MainActivity.this, "刷新成功", Toast.LENGTH_SHORT).show();
@@ -402,11 +425,11 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
             @Override
             public void onClick(View v) {
                 try {
-                    String url="mqqwpa://im/chat?chat_type=wpa&uin=744621980";
+                    String url = "mqqwpa://im/chat?chat_type=wpa&uin=744621980";
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(MainActivity.this,"请检查是否安装QQ",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "请检查是否安装QQ", Toast.LENGTH_SHORT).show();
                 }
                 dialog.dismiss();
             }

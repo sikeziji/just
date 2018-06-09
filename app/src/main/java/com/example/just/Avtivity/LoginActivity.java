@@ -63,8 +63,10 @@ public class LoginActivity extends BaseActivity{
                     dialog.setCancelable(true);
                     dialog.show();
                 }else{
-                    HttpUtil.loginRequest("http://120.79.65.201:80/Android/Test",username.getText().toString()
-                            ,password.getText().toString(),new okhttp3.Callback(){
+                    HttpUtil.loginRequest("http://120.79.65.201:80/Android/Test",
+                            username.getText().toString()
+                            ,password.getText().toString(),
+                            new okhttp3.Callback(){
                                 @Override
                                 public void onFailure(Call call, IOException e) {
                                 }
