@@ -1,17 +1,23 @@
 # just
-    v2.0:改善页面，首页加入综艺、体育、科技能栏目可进行选择
 
-    欢迎页渐进
-    使用banner轮播图
-    使用FloatingActionButton，上拉出现，下拉消失
-    后台JSOUP爬取信息，返回json格式，实时下拉刷新
+主要功能：
 
+Material Design设计风格使用滑动菜单NavigationView而不是底部菜单栏，新闻栏目一开始使用recyclerview横向，后改为TabLayout...
 
-    使用网络编程实现登录功能
+下拉刷新，上拉加载更多，设置以15条新闻为1页
 
+新闻获取JSOUP，内容来自腾讯新闻、大众点评、央视网以及环球网，只做学习用如有侵权，联系本人删除
 
-    更换主题，实现夜间模式
-    使用百度地图查看位置
-    Sqlite实现本机收藏功能（增删改查）  
-    Intent实现联系作者（QQ、电话、短信）
-    版本控制Git
+百度地图查看自己位置
+
+OkHttp进行用户登录
+
+Sqlite进行新闻收藏的增删改查
+
+更改主题
+
+使用Intent实现联系作者（电话、短信、QQ）以及分享功能
+
+banner轮播图，FloatingActionButton，上拉出现，下拉消失
+
+本人安卓初学，欢迎大佬指正也欢迎大佬们star~ 

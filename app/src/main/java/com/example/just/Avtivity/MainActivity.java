@@ -129,14 +129,14 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
         //放标题的集合
         list_title = new ArrayList<>();
 
-        list_path.add("http://ww4.sinaimg.cn/large/006uZZy8jw1faic21363tj30ci08ct96.jpg");
-        list_path.add("http://ww4.sinaimg.cn/large/006uZZy8jw1faic259ohaj30ci08c74r.jpg");
-        list_path.add("http://ww4.sinaimg.cn/large/006uZZy8jw1faic2b16zuj30ci08cwf4.jpg");
-        list_path.add("http://ww4.sinaimg.cn/large/006uZZy8jw1faic2e7vsaj30ci08cglz.jpg");
-        list_title.add("好好学习");
-        list_title.add("天天向上");
-        list_title.add("热爱劳动");
-        list_title.add("早睡早起");
+        list_path.add("http://www.dzwww.com/2018/shzzqdfh/shqd/xw_159406/201806/W020180611355709365993.jpg");
+        list_path.add("http://img1.gtimg.com/rcdimg/20180611/11/5348433295_990x477.jpg");
+        list_path.add("http://img1.gtimg.com/rcdimg/20180611/14/6071795317_990x477.jpg");
+        list_path.add("http://img1.gtimg.com/rcdimg/20180610/17/2710065103_990x477.jpg");
+        list_title.add("习近平主持上合组织青岛峰会并发表重要讲话");
+        list_title.add("白血病粉丝过生日，收到胡歌送来的花：愿你一生温暖纯良");
+        list_title.add("杨幂终于找到适合自己的古装发型了");
+        list_title.add("残缺的全家福：G7峰会官方公布大合影 特朗普不在其中");
         //设置内置样式，共有六种可以点入方法内逐一体验使用。
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
         //设置图片加载器，图片加载器在下方
