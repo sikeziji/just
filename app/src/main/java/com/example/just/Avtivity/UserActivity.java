@@ -24,10 +24,10 @@ public class UserActivity extends BaseActivity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
-        Toolbar toolbar = findViewById(R.id.user_toolbar);
-        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.user_collapsing_toolbar);
-        ImageView imageView = findViewById(R.id.user_image_view);
-        WebView mWebView = findViewById(R.id.user_message);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.user_toolbar);
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.user_collapsing_toolbar);
+        ImageView imageView = (ImageView) findViewById(R.id.user_image_view);
+        WebView mWebView = (WebView) findViewById(R.id.user_message);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null){

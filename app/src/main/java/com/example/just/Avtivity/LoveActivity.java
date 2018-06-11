@@ -26,6 +26,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -113,7 +114,7 @@ public class LoveActivity extends BaseActivity {
                         getList();
                         adapter.notifyDataSetChanged();
                         swipeRefresh.setRefreshing(false);
-                        Toast.makeText(LoveActivity.this,"刷新成功",Toast.LENGTH_SHORT).show();
+                        Toasty.success(LoveActivity.this, "刷新成功", Toast.LENGTH_SHORT, true).show();
                     }
                 });
             }

@@ -15,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -63,6 +64,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import static com.example.just.Adapter.StoryAdapter.count;
 
 
 public class MainActivity extends BaseActivity implements OnBannerListener {
@@ -184,13 +187,34 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
         initView();
         dbHelper = new MyDatabaseHelper(this, "Love.db", null, 1);
         dbHelper.getWritableDatabase();
-        initCate();
-        RecyclerView cate_recyclerView = findViewById(R.id.cate_rview);
-        LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
-        layoutManager1.setOrientation(LinearLayoutManager.HORIZONTAL);
-        cate_recyclerView.setLayoutManager(layoutManager1);
-        CateAdapter adapter1 = new CateAdapter(cateList);
-        cate_recyclerView.setAdapter(adapter1);
+
+        TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        mTabLayout.addTab(mTabLayout.newTab().setText("首页"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("综艺"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("体育"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("明星"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("科技"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("军事"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("旅游"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("文化"));
+        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                id = String.valueOf(tab.getPosition());
+                getList(id);
+                count = 0;
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
         recyclerView = (RecyclerView) findViewById(R.id.main_rview);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(layoutManager);
@@ -201,6 +225,9 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
                 if (msg.what == 1) {
                     adapter = new StoryAdapter(storyList);
                     recyclerView.setAdapter(adapter);
+                    if (count == 1){
+                        recyclerView.scrollToPosition(10);
+                    }
                 }
             }
         };
@@ -323,6 +350,7 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                count = 0;
                 refreshStory();
             }
         });
@@ -330,16 +358,6 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
 
     }
 
-    public void initCate() {
-        cateList.add(new Cate("首页"));
-        cateList.add(new Cate("综艺"));
-        cateList.add(new Cate("体育"));
-        cateList.add(new Cate("明星"));
-        cateList.add(new Cate("科技"));
-        cateList.add(new Cate("军事"));
-        cateList.add(new Cate("旅游"));
-        cateList.add(new Cate("文化"));
-    }
 
     public void refreshStory() {
         new Thread(new Runnable() {
