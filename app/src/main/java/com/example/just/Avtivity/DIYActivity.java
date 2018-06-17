@@ -9,10 +9,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.just.Adapter.DIYAdapter;
 import com.example.just.Adapter.LoveAdapter;
 import com.example.just.Bean.Story;
 import com.example.just.R;
@@ -35,7 +37,7 @@ public class DIYActivity extends BaseActivity {
     private RecyclerView recyclerView;
     public List<Story> loveList = new ArrayList<>();
     private Handler handler;
-    private LoveAdapter adapter;
+    private DIYAdapter adapter;
 
     private void getList(){
         new Thread(new Runnable() {
@@ -77,14 +79,14 @@ public class DIYActivity extends BaseActivity {
         }
 
         recyclerView = (RecyclerView) findViewById(R.id.diy_rview);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         getList();
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 if (msg.what == 1) {
-                    adapter = new LoveAdapter(loveList);
+                    adapter = new DIYAdapter(loveList);
                     recyclerView.setAdapter(adapter);
                 }
             }

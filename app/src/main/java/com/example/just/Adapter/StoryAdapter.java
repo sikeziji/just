@@ -35,6 +35,8 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
     public static int count;
     public static final int page = 15;
 
+
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         ImageView storyImage;
@@ -88,7 +90,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                     mContext.startActivity(intent);
                 } else {
                     if (count == 0) {
-
                         Toasty.success(view.getContext(), "Load more", Toast.LENGTH_SHORT,true).show();
                         count++;
                         getList(id);

@@ -90,6 +90,7 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
     public static String id = "0";
     private IntentFilter intentFilter;
     private NetworkChangeReceiver networkChangeReceiver;
+    private NavigationView navigationView;
 
     //getList_id切换主题
     public static void getList(final String id) {
@@ -232,6 +233,8 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
             }
         };
 
+
+
         //配置ToolBar
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
@@ -245,7 +248,7 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
         }
 
         //配置滑动菜单页的点击事件
-        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemBackgroundResource(R.color.background);
         /*navigationView.setCheckedItem(R.id.nav_diy);*/
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -281,6 +284,63 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
                                 isNight = true;
                                 recreate();
                             }
+                            break;
+                        case R.id.nav_message:
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                            dialog.setTitle("嘿呀");
+                            dialog.setMessage("做我女朋友吧");
+                            dialog.setCancelable(false);
+                            dialog.setPositiveButton("好呀", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                                    dialog.setTitle("Nice");
+                                    dialog.setMessage("爱你，mua~");
+                                    dialog.setCancelable(true);
+                                    dialog.show();
+                                }
+                            });
+                            dialog.setNegativeButton("不行", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                                    dialog.setTitle("嘿呀");
+                                    dialog.setMessage("房产证写你名字呢");
+                                    dialog.setCancelable(false);
+                                    dialog.setPositiveButton("嗯...", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                                            dialog.setTitle("嘿呀");
+                                            dialog.setMessage("我妈会游泳呢");
+                                            dialog.setCancelable(false);
+                                            dialog.setPositiveButton("嗯...", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                                                    dialog.setTitle("嘿呀");
+                                                    dialog.setMessage("保大保大！");
+                                                    dialog.setCancelable(false);
+                                                    dialog.setPositiveButton("同意了~", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                                                            dialog.setTitle("Nice");
+                                                            dialog.setMessage("爱你，mua~");
+                                                            dialog.setCancelable(true);
+                                                            dialog.show();
+                                                        }
+                                                    });
+                                                    dialog.show();
+                                                }
+                                            });
+                                            dialog.show();
+                                        }
+                                    });
+                                    dialog.show();
+                                }
+                            });
+                            dialog.show();
                             break;
                         case R.id.nav_love:
                             Intent intent2 = new Intent(MainActivity.this, LoveActivity.class);
@@ -358,7 +418,6 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
 
     }
 
-
     public void refreshStory() {
         new Thread(new Runnable() {
             @Override
@@ -391,6 +450,7 @@ public class MainActivity extends BaseActivity implements OnBannerListener {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            mDrawerLayout.closeDrawers();
             if ((System.currentTimeMillis() - mExitTime) > 2000) {
                 Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
                 mExitTime = System.currentTimeMillis();

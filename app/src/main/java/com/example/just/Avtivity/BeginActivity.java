@@ -21,8 +21,8 @@ public class BeginActivity extends BaseActivity {
 
         setContentView(view);
 
-        AlphaAnimation aa=new AlphaAnimation(0.3f, 1f);           //设置动画效果
-        aa.setDuration(2000);
+        AlphaAnimation aa=new AlphaAnimation(0f, 1f);           //设置动画效果
+        aa.setDuration(2500);
         view.startAnimation(aa);
 
         aa.setAnimationListener(new Animation.AnimationListener() {

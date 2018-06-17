@@ -21,3 +21,6 @@ Sqlite进行新闻收藏的增删改查
 banner轮播图，FloatingActionButton，上拉出现，下拉消失
 
 本人安卓初学，欢迎大佬指正也欢迎大佬们star~ 
+
+![image](https://github.com/NTDXYG/just/blob/master/img/1.gif)
+
